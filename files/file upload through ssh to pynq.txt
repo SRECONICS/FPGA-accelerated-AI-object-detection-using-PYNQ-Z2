@@ -1,0 +1,42 @@
+
+scp "C:\PYNQ files\cnn_accel.bit" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\cnn_accel.hwh" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\main.py" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\coco.names" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\camera_stream.py" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\yolo_inference.py" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\yolov3-tiny.weights" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\yolov3-tiny.cfg" xilinx@192.168.2.99:/home/xilinx/
+scp "C:\PYNQ files\ultralytics-8.4.19-py3-none-any.whl" xilinx@192.168.2.99:/home/xilinx/
+
+ssh xilinx@192.168.2.99
+python3 main.py
+
+when ssh dont connect , run this cmd
+ssh-keygen -R 192.168.2.99
+
+to clear caches
+sudo sh -c "echo 3 > /proc/sys/vm/drop_caches"
+
+
+to monitor pynq 
+watch -n 1 "echo '=== RAM ===' && free -h && echo '=== CPU ===' && top -bn1 | head -15 && echo '=== TEMP ===' && cat /sys/class/thermal/thermal_zone0/temp"
+
+
+
+to get output , run this command in cm and click export in vitis HLS 
+
+$file = "C:\Users\SHREERAJ\cnn_accel\cnn_accelerator\solution1\impl\ip\run_ippack.tcl"
+Write-Host "Watching..."
+while ($true) {
+    if (Test-Path $file) {
+        $content = Get-Content $file -Raw
+        if ($content -match '\$Revision') {
+            $patched = $content -replace 'set_property core_revision \$Revision \$core', 'set_property core_revision 1 $core'
+            Set-Content $file $patched
+            Write-Host "Patched!"
+            break
+        }
+    }
+    Start-Sleep -Milliseconds 100
+}
